@@ -1,15 +1,11 @@
 module.exports = render;
 
 const React = require("react");
-
-function pp(obj) {
-  console.log(JSON.stringify(obj,{},2));
-  return obj;
-}
-
+const {makeEnsureUnique,pp} = require("./utils");
+const renderInline = require("./renderInline");
 
 let Paragraph = ({text}) => {
-  return <p>{text}</p>;
+  return <p>{renderInline(text)}</p>;
 };
 
 let Code = React.createClass({
@@ -77,31 +73,7 @@ function hashCode(str) {
   return hash;
 };
 
-let {kebabCase} = require("lodash");
 
-function makeEnsureUnique() {
-  let ids = {};
-  return function ensureUnique(str) {
-    let id = kebabCase(str);
-    let i = 1;
-    while(true) {
-      let tryId = id;
-      if(i != 1) {
-        tryId = `${tryId}_${i}`
-      }
-
-      if(ids[tryId] == null) {
-        id = tryId;
-        ids[id] = id;
-        break;
-      }
-
-      i++;
-    }
-
-    return id;
-  };
-}
 
 let Section = React.createClass({
   headerLevels: ["h1","h2","h3","h4","h5","h6"],
@@ -166,11 +138,11 @@ function test() {
   const sectionize = require("./sectionize");
   const fs = require("fs");
 
-  let md = fs.readFileSync("watch.md","utf8");
+  let md = fs.readFileSync("test.md","utf8");
   let sections = sectionize(tokenize(md));
   pp(sections);
   console.log(renderToString(sections));
 }
 
-// test();
+test();
 // renderToString(md);
