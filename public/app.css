@@ -1,0 +1,37 @@
+html, body {
+  /*margin: 0;*/
+  /*padding: 0;*/
+}
+
+body {
+  color: black;
+  font-family: "Avenir Next", "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+}
+
+.i18n {
+  background: #DADADA;
+}
+
+.marked {
+  width: 100%;
+  max-width: 720px;
+  margin: auto;
+
+  font-size: 18px;
+}
+
+.marked code {
+  background: #F0F0F0;
+}
+
+.marked pre code {
+  font-size: 14px;
+}
+
+.marked img {
+  max-width: 100%;
+}
+
+.marked video {
+ max-width: 100%;
+}

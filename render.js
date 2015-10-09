@@ -165,7 +165,7 @@ let Document = React.createClass({
 
   render() {
     return (
-      <div>
+      <div className="marked">
         {this.renderSections()}
       </div>
     );
