@@ -7,9 +7,24 @@ module.exports = function render(sections) {
 const React = require("react");
 const {makeEnsureUnique,pp} = require("./utils");
 const renderInline = require("./renderInline");
+const renderHTML = require("./renderHTML");
+
+
 
 let Paragraph = ({text}) => {
   return <p>{renderInline(text)}</p>;
+};
+
+let RawHTML = ({text}) => {
+  return renderHTML(text,widgets);
+}
+
+let Video = ({src}) => {
+  return <video src={src} controls autoPlay loop/>
+};
+
+const widgets = {
+  Video,
 };
 
 let Code = React.createClass({
@@ -47,6 +62,7 @@ let Code = React.createClass({
 let components = {
   "paragraph": Paragraph,
   "code": Code,
+  "html": RawHTML,
 }
 
 function renderContent(node,key) {
