@@ -1,0 +1,30 @@
+{
+  "name": "live-md",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "babel": "^5.8.23",
+    "chokidar": "^1.2.0",
+    "express": "^4.13.3",
+    "marked": "^0.3.5",
+    "react": "^0.14.0",
+    "sockjs": "^0.3.15"
+  },
+  "devDependencies": {
+    "babel-runtime": "^5.8.25",
+    "babelify": "^6.3.0",
+    "benchmark": "^1.0.0",
+    "browserify": "^11.2.0",
+    "chai": "^3.3.0",
+    "microtime": "^2.0.0",
+    "mocha": "^2.3.3",
+    "mocha-babel": "^3.0.0",
+    "watchify": "^3.4.0"
+  }
+}
