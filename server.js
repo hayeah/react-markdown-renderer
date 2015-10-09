@@ -43,4 +43,6 @@ var server = http.createServer(app);
 
 echo.installHandlers(server, {prefix:'/echo'});
 
-server.listen(9999, '0.0.0.0');
+let port = process.env.PORT || 3000;
+console.log("listening on port",port);
+server.listen(port, '0.0.0.0');
