@@ -1,5 +1,6 @@
 let renderMarkdown = require("./render");
 let React = require("react");
+let ReactDOM = require("react-dom");
 
 // console.log(snakeCase);
 
@@ -58,5 +59,5 @@ let App = React.createClass({
 });
 
 window.onload = () => {
-  React.render(<App/>, document.body);
+  ReactDOM.render(<App/>, document.querySelector("#react-root"));
 };

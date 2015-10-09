@@ -4,4 +4,4 @@ test:
 
 .PHONY: client
 client:
-	watchify -t babelify client.js  -o public/app.js
+	watchify --debug -t babelify client.js  -o public/app.js

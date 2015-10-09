@@ -123,8 +123,6 @@ let Document = React.createClass({
 function render(sections) {
   // let sections = sectionize(tokenize(md));
 
-  // pp(sections);
-
   return <Document sections={sections}/>
 
 }
