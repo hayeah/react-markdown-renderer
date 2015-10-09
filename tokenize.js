@@ -3,18 +3,24 @@ let {lexer} = require("marked");
 const startTag = '<cn>';
 const endTag = '</cn>';
 
-module.exports = function tokenize(md,lang) {
+module.exports = function tokenize(md) {
   let tokens = lexer(md);
 
-  if(lang == "cn") {
-    tokens = selectcn(tokens);
-  } else {
-    tokens = tokens.filter(token => {
-      return !isCNBlock(token)
-    });
-  }
+  let allTokens = [];
+  tokens.forEach(token => {
+    if(isCNBlock(token)) {
+      let cnTokens = tokenize(extractCnContent(token));
+      allTokens.push({
+        type: "I18n",
+        lang: "zh-cn",
+        body: cnTokens,
+      });
+    } else {
+      allTokens.push(token);
+    }
+  });
 
-  return tokens;
+  return allTokens;
 }
 
 function isCNBlock(token) {

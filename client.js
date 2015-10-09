@@ -8,7 +8,8 @@ let ReactDOM = require("react-dom");
 let App = React.createClass({
   getInitialState() {
     return {
-      sections: [],
+      lang: "default",
+      src: "",
     };
   },
 
@@ -20,10 +21,10 @@ let App = React.createClass({
     };
 
     sockjs.onmessage = (e) => {
-      let md = e.data;
-      console.log('md', md);
-      let sections = compileMarkdown(md);
-      this.setState({sections});
+      let src = e.data;
+      console.log('md', src);
+
+      this.setState({src});
     };
 
     sockjs.onclose   = function()  {
@@ -31,10 +32,23 @@ let App = React.createClass({
     };
   },
 
+  chooseLanguage(lang) {
+    this.setState({lang});
+  },
+
   render() {
-    let {sections} = this.state;
+    let {src,lang} = this.state;
+    let sections = compileMarkdown(src,lang);
     let doc = renderMarkdown(sections)
-    return doc;
+    return (
+      <div>
+        <div>
+          <a href="javascript:void(0)" onClick={this.chooseLanguage.bind(this,"cn")}>Chinese</a>
+          <a href="javascript:void(0)" onClick={this.chooseLanguage.bind(this,"default")}>Default</a>
+        </div>
+        {doc}
+      </div>
+    );
   },
 });
 

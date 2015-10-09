@@ -4,7 +4,7 @@ const {makeEnsureUnique,pp} = require("./utils");
 const renderInline = require("./renderInline");
 const renderHTML = require("./renderHTML");
 
-module.exports = function render(sections) {
+module.exports = function render(sections,lang) {
   return <Document sections={sections}/>
 };
 
@@ -17,7 +17,7 @@ let RawHTML = ({text}) => {
 }
 
 let Video = ({src}) => {
-  return <video src={src} controls autoPlay loop/>
+  return <video src={src} controls/>
 };
 
 const widgets = {
@@ -55,12 +55,13 @@ let Code = React.createClass({
   }
 });
 
-
-let components = {
-  "paragraph": Paragraph,
-  "code": Code,
-  "html": RawHTML,
-}
+let I18n = ({body}) => {
+  return (
+    <div className="i18n">
+      {renderNodes(body)}
+    </div>
+  );
+};
 
 function renderContent(node,key) {
   let {type} = node;
@@ -90,31 +91,48 @@ function hashCode(str) {
   return hash;
 };
 
+const headerLevels = ["h1","h2","h3","h4","h5","h6"];
+let Heading = (props) => {
+  let {depth,text,id} = props;
+  let tag = headerLevels[depth-1];
+  let headerProps = id ? {id} : {};
+  return React.createElement(tag,headerProps,text);
+}
 
+function renderNodes(nodes) {
+  let ensureUnique = makeEnsureUnique();
+  return nodes.map((token) => {
+    let {text} = token;
+    let key = ensureUnique(hashCode(text));
+    return (
+      renderContent(token,key)
+    );
+  });
+}
 
 let Section = React.createClass({
-  headerLevels: ["h1","h2","h3","h4","h5","h6"],
   renderContent() {
     let {content} = this.props;
     let ensureUnique = makeEnsureUnique();
 
-    return content.map((token) => {
-      let {text} = token;
-      let key = ensureUnique(hashCode(text));
-      return (
-        renderContent(token,key)
-      );
-    });
+    return renderNodes(content);
+
+    // content.map((token) => {
+    //   let {text} = token;
+    //   let key = ensureUnique(hashCode(text));
+    //   return (
+    //     renderContent(token,key)
+    //   );
+    // });
   },
 
   render() {
     let {heading,key} = this.props;
 
-    let {depth: headerLevel, text: title} = heading;
-    let header = React.createElement(this.headerLevels[headerLevel-1],{id: key},title);
+    let header = <Heading {...heading}/>
 
     return (
-      <section>
+      <section id={key} key={key}>
         {header}
         {this.renderContent()}
       </section>
@@ -124,7 +142,7 @@ let Section = React.createClass({
 
 let Document = React.createClass({
   renderSections() {
-    let {sections} = this.props;
+    let {sections,lang} = this.props;
     return sections.map(section => <Section {...section}/>)
   },
 
@@ -136,3 +154,11 @@ let Document = React.createClass({
     );
   }
 });
+
+let components = {
+  "paragraph": Paragraph,
+  "heading": Heading,
+  "code": Code,
+  "html": RawHTML,
+  I18n,
+};
