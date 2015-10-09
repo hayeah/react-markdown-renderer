@@ -1,4 +1,8 @@
-module.exports = render;
+module.exports = function render(sections) {
+  // let sections = sectionize(tokenize(md));
+
+  return <Document sections={sections}/>
+};
 
 const React = require("react");
 const {makeEnsureUnique,pp} = require("./utils");
@@ -119,28 +123,3 @@ let Document = React.createClass({
     );
   }
 });
-
-function render(sections) {
-  // let sections = sectionize(tokenize(md));
-
-  return <Document sections={sections}/>
-
-}
-
-function renderToString(sections) {
-  return React.renderToString(render(sections));
-}
-
-function test() {
-  const tokenize = require("./tokenize");
-  const sectionize = require("./sectionize");
-  const fs = require("fs");
-
-  let md = fs.readFileSync("test.md","utf8");
-  let sections = sectionize(tokenize(md));
-  pp(sections);
-  console.log(renderToString(sections));
-}
-
-// test();
-// renderToString(md);
