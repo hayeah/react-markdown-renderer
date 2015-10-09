@@ -142,13 +142,16 @@ let Section = React.createClass({
   },
 
   render() {
-    let {heading,key,chosenlang} = this.props;
+    let {heading,id,chosenlang} = this.props;
 
     let useDefaultLanguage = chosenlang === "all" || chosenlang === "default";
     let body = this.renderContent();
 
+    let isExercise = id && id.indexOf("exercise") == 0;
+    let className = isExercise && "exercise";
+
     return (
-      <section id={key} key={key}>
+      <section className={className} id={id} key={id}>
         {useDefaultLanguage && <Heading {...heading}/>}
         {body}
       </section>
@@ -160,7 +163,9 @@ let Document = React.createClass({
   renderSections() {
     let {sections,chosenlang} = this.props;
 
-    return sections.map(section => <Section chosenlang={chosenlang} {...section}/>)
+    return sections.map(section =>
+      <Section id={section.key} chosenlang={chosenlang} {...section}/>
+    )
   },
 
   render() {

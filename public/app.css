@@ -8,6 +8,16 @@ body {
   font-family: "Avenir Next", "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 }
 
+.language-control {
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.language-control a {
+  margin-right: 15px;
+}
+
 .i18n {
   background: #DADADA;
 }
@@ -34,4 +44,20 @@ body {
 
 .marked video {
  max-width: 100%;
+}
+
+.marked section.exercise:before {
+  content: "";
+  display: block;
+  border: 2px solid blue;
+  margin-top: 60px;
+  /*background-color: rgba(255,0,0,0.3);*/
+}
+
+.marked section.exercise:after {
+  content: "";
+  display: block;
+  border: 2px solid rgba(0,0,255,0.3);
+  margin-bottom: 60px;
+  /*background-color: rgba(255,0,0,0.3);*/
 }

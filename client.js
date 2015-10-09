@@ -42,7 +42,7 @@ let App = React.createClass({
     let doc = renderMarkdown(sections,lang)
     return (
       <div>
-        <div>
+        <div className="language-control">
           <a href="javascript:void(0)" onClick={this.chooseLanguage.bind(this,"zh-cn")}>Chinese</a>
           <a href="javascript:void(0)" onClick={this.chooseLanguage.bind(this,"default")}>Default</a>
           <a href="javascript:void(0)" onClick={this.chooseLanguage.bind(this,"all")}>Both</a>
