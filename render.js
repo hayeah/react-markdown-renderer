@@ -12,12 +12,26 @@ let Paragraph = ({text}) => {
   return <p>{renderInline(text)}</p>;
 };
 
+let Text = ({text}) => {
+  return renderInline(text);
+};
+
 let RawHTML = ({text}) => {
   return renderHTML(text,widgets);
 }
 
 let Video = ({src}) => {
   return <video src={src} controls/>
+};
+
+let ListItem = ({body}) => {
+  return <li>{renderNodes(body)}</li>;
+};
+
+let List = ({items,ordered}) => {
+  let tag = ordered ? "ol" : "ul";
+  let renderedItems = renderNodes(items);
+  return React.createElement(tag,null,renderedItems);
 };
 
 const widgets = {
@@ -88,12 +102,12 @@ let Heading = (props) => {
   return React.createElement(tag,headerProps,text);
 }
 
-function renderNodes(nodes,choseLang) {
+function renderNodes(nodes,chosenLang="default") {
   let ensureUnique = makeEnsureUnique();
   return nodes.map((token) => {
     let {text} = token;
     let key = ensureUnique(hashCode(text));
-    return renderNode(token,key,choseLang);
+    return renderNode(token,key,chosenLang);
   });
 }
 
@@ -111,7 +125,8 @@ function renderNode(node,key,chosenlang) {
 
   let component = components[type];
   if(component == null) {
-    throw "type not supported: " + type;
+    return "";
+    console.warn("type not supported: " + type);
   }
 
   return React.createElement(component,{
@@ -162,5 +177,8 @@ let components = {
   "heading": Heading,
   "code": Code,
   "html": RawHTML,
+  "text": Text,
+  "list": List,
+  "list-item": ListItem,
   I18n,
 };

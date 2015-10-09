@@ -45,24 +45,3 @@ function extractCnContent(token) {
   }
   return text.substring(startTag.length,end);
 }
-
-function selectcn(tokens) {
-  let parts = [];
-
-  tokens.forEach((token) => {
-    if(isCNBlock(token)) {
-      parts.push(extractCnContent(token));
-    }
-  });
-
-  let md = parts.join("");
-
-  return lexer(md);
-}
-
-// console.log("raw",lexer(src));
-// console.log("cn-raw",lexer(src).filter(isCNBlock));
-// console.log("cn",tokenize(src,"cn"));
-// console.log("default",tokenize(src));
-
-
