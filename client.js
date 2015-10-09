@@ -1,29 +1,9 @@
 let renderMarkdown = require("./render");
+let compileMarkdown = require("./compile");
 let React = require("react");
 let ReactDOM = require("react-dom");
 
-// console.log(snakeCase);
 
-// setInterval(() => {
-//   console.log(new Date());
-// },1000)
-
-// function connect() {
-//   let sockjs = new SockJS('/echo');
-
-
-//   sockjs.onopen = () => {
-//     console.log('[*] open', sockjs.protocol);
-//   };
-
-//   sockjs.onmessage = function(e) {
-//     console.log('[.] message', e.data);
-//   };
-
-//   sockjs.onclose   = function()  {
-//     console.log('[*] close');
-//   };
-// }
 
 let App = React.createClass({
   getInitialState() {
@@ -40,9 +20,9 @@ let App = React.createClass({
     };
 
     sockjs.onmessage = (e) => {
-
-      let sections = JSON.parse(e.data);
-      console.log('sections:', sections);
+      let md = e.data;
+      console.log('md', md);
+      let sections = compileMarkdown(md);
       this.setState({sections});
     };
 

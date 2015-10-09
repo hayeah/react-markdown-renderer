@@ -1,15 +1,12 @@
-module.exports = function render(sections) {
-  // let sections = sectionize(tokenize(md));
-
-  return <Document sections={sections}/>
-};
-
 const React = require("react");
+
 const {makeEnsureUnique,pp} = require("./utils");
 const renderInline = require("./renderInline");
 const renderHTML = require("./renderHTML");
 
-
+module.exports = function render(sections) {
+  return <Document sections={sections}/>
+};
 
 let Paragraph = ({text}) => {
   return <p>{renderInline(text)}</p>;

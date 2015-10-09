@@ -7,13 +7,6 @@ const sockjs = require('sockjs');
 const chokidar = require("chokidar");
 
 
-const tokenize = require("./tokenize");
-const sectionize = require("./sectionize");
-
-function compile(md) {
-  return sectionize(tokenize(md));
-}
-
 let app = express();
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -23,8 +16,8 @@ echo.on('connection', function(conn) {
   let watcher = chokidar.watch(srcPath);
 
   function sendContent() {
-    fs.readFile(srcPath,"utf8",(err,md) => {
-      conn.write(JSON.stringify(compile(md)));
+    fs.readFile(srcPath,"utf8",(err,src) => {
+      conn.write(src);
     });
   }
 
