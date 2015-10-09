@@ -1,8 +1,13 @@
-let {InlineLexer} = require("marked");
+let marked = require("marked");
 let babel = require("babel");
 let React = require("react");
 
-let inlineLexer = new InlineLexer([]);
+let options = {
+  ...marked.defaults,
+  xhtml: true,
+};
+
+let inlineLexer = new marked.InlineLexer([],options);
 
 module.exports = function renderInline(md) {
   // let inlineHTML = InlineLexer.output(md,[]);
