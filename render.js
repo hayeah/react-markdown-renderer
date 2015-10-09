@@ -4,8 +4,8 @@ const {makeEnsureUnique,pp} = require("./utils");
 const renderInline = require("./renderInline");
 const renderHTML = require("./renderHTML");
 
-module.exports = function render(sections,lang) {
-  return <Document sections={sections}/>
+module.exports = function render(sections,choselang="default") {
+  return <Document chosenlang={choselang} sections={sections}/>
 };
 
 let Paragraph = ({text}) => {
@@ -55,27 +55,16 @@ let Code = React.createClass({
   }
 });
 
-let I18n = ({body}) => {
+let I18n = ({body,lang}) => {
+  let renderedBody = renderNodes(body,"default");
   return (
     <div className="i18n">
-      {renderNodes(body)}
+      {renderedBody}
     </div>
   );
 };
 
-function renderContent(node,key) {
-  let {type} = node;
 
-  let component = components[type];
-  if(component == null) {
-    throw "type not supported: " + type;
-  }
-
-  return React.createElement(component,{
-    key,
-    ...node,
-  });
-}
 
 function hashCode(str) {
   if(str == null || str.charCodeAt == null) {
@@ -99,42 +88,54 @@ let Heading = (props) => {
   return React.createElement(tag,headerProps,text);
 }
 
-function renderNodes(nodes) {
+function renderNodes(nodes,choseLang) {
   let ensureUnique = makeEnsureUnique();
   return nodes.map((token) => {
     let {text} = token;
     let key = ensureUnique(hashCode(text));
-    return (
-      renderContent(token,key)
-    );
+    return renderNode(token,key,choseLang);
+  });
+}
+
+function renderNode(node,key,chosenlang) {
+  let {type,lang} = node;
+
+  let isI18n = type === "I18n";
+  let useNode = chosenlang === "all" ||
+    (!isI18n && chosenlang === "default") ||
+    (isI18n && chosenlang === lang);
+
+  if(!useNode) {
+    return null;
+  }
+
+  let component = components[type];
+  if(component == null) {
+    throw "type not supported: " + type;
+  }
+
+  return React.createElement(component,{
+    key,
+    ...node,
   });
 }
 
 let Section = React.createClass({
   renderContent() {
-    let {content} = this.props;
-    let ensureUnique = makeEnsureUnique();
-
-    return renderNodes(content);
-
-    // content.map((token) => {
-    //   let {text} = token;
-    //   let key = ensureUnique(hashCode(text));
-    //   return (
-    //     renderContent(token,key)
-    //   );
-    // });
+    let {content,chosenlang} = this.props;
+    return renderNodes(content,chosenlang);
   },
 
   render() {
-    let {heading,key} = this.props;
+    let {heading,key,chosenlang} = this.props;
 
-    let header = <Heading {...heading}/>
+    let useDefaultLanguage = chosenlang === "all" || chosenlang === "default";
+    let body = this.renderContent();
 
     return (
       <section id={key} key={key}>
-        {header}
-        {this.renderContent()}
+        {useDefaultLanguage && <Heading {...heading}/>}
+        {body}
       </section>
     );
   },
@@ -142,8 +143,9 @@ let Section = React.createClass({
 
 let Document = React.createClass({
   renderSections() {
-    let {sections,lang} = this.props;
-    return sections.map(section => <Section {...section}/>)
+    let {sections,chosenlang} = this.props;
+
+    return sections.map(section => <Section chosenlang={chosenlang} {...section}/>)
   },
 
   render() {

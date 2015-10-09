@@ -39,12 +39,13 @@ let App = React.createClass({
   render() {
     let {src,lang} = this.state;
     let sections = compileMarkdown(src,lang);
-    let doc = renderMarkdown(sections)
+    let doc = renderMarkdown(sections,lang)
     return (
       <div>
         <div>
-          <a href="javascript:void(0)" onClick={this.chooseLanguage.bind(this,"cn")}>Chinese</a>
+          <a href="javascript:void(0)" onClick={this.chooseLanguage.bind(this,"zh-cn")}>Chinese</a>
           <a href="javascript:void(0)" onClick={this.chooseLanguage.bind(this,"default")}>Default</a>
+          <a href="javascript:void(0)" onClick={this.chooseLanguage.bind(this,"all")}>Both</a>
         </div>
         {doc}
       </div>
