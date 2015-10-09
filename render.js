@@ -95,11 +95,18 @@ function hashCode(str) {
 };
 
 const headerLevels = ["h1","h2","h3","h4","h5","h6"];
+
 let Heading = (props) => {
   let {depth,text,id} = props;
   let tag = headerLevels[depth-1];
   let headerProps = id ? {id} : {};
-  return React.createElement(tag,headerProps,text);
+
+  let body = (
+    <a href={"#"+id}>
+      {text}
+    </a>
+  );
+  return React.createElement(tag,headerProps,body);
 }
 
 function renderNodes(nodes,chosenLang="default") {
@@ -152,7 +159,7 @@ let Section = React.createClass({
 
     return (
       <section className={className} id={id} key={id}>
-        {useDefaultLanguage && <Heading {...heading}/>}
+        {useDefaultLanguage && <Heading id={id} {...heading}/>}
         {body}
       </section>
     );
@@ -167,6 +174,14 @@ let Document = React.createClass({
       <Section id={section.key} chosenlang={chosenlang} {...section}/>
     )
   },
+
+  // componentDidMount() {
+  //   let hash = window.location.hash;
+  //   if(hash != null) {
+  //     let $e = document.querySelector(hash);
+  //     window.scrollTo(0,$e.offsetTop);
+  //   }
+  // },
 
   render() {
     return (
