@@ -3,8 +3,6 @@ let compileMarkdown = require("./compile");
 let React = require("react");
 let ReactDOM = require("react-dom");
 
-
-
 let App = React.createClass({
   getInitialState() {
     return {

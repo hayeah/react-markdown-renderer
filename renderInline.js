@@ -1,5 +1,5 @@
 let marked = require("marked");
-let babel = require("babel");
+let babel = require("babel-core/browser");
 let React = require("react");
 
 let options = {

@@ -11,22 +11,28 @@
   "dependencies": {
     "babel": "^5.8.23",
     "chokidar": "^1.2.0",
+    "css-loader": "^0.19.0",
     "express": "^4.13.3",
     "marked": "^0.3.5",
     "react": "^0.14.0",
     "react-dom": "^0.14.0",
-    "sockjs": "^0.3.15"
+    "sockjs": "^0.3.15",
+    "style-loader": "^0.12.4"
   },
   "devDependencies": {
+    "babel-core": "^5.8.25",
+    "babel-loader": "^5.3.2",
     "babel-runtime": "^5.8.25",
     "babelify": "^6.3.0",
     "benchmark": "^1.0.0",
     "browserify": "^11.2.0",
     "chai": "^3.3.0",
+    "json-loader": "^0.5.3",
     "microtime": "^2.0.0",
     "mocha": "^2.3.3",
     "mocha-babel": "^3.0.0",
     "uglifyify": "^3.0.1",
-    "watchify": "^3.4.0"
+    "watchify": "^3.4.0",
+    "webpack": "^1.12.2"
   }
 }

@@ -16,8 +16,9 @@ console.log("live preview:", markdownFilepath, markdownDir);
 
 // process.exit(0);
 
-app.use(express.static(markdownDir));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(markdownDir));
+
 
 var echo = sockjs.createServer({ sockjs_url: 'http://cdn.jsdelivr.net/sockjs/1.0.1/sockjs.min.js' });
 echo.on('connection', function(conn) {
