@@ -1,5 +1,5 @@
-.PHONY: all
-all:
+.PHONY: dev
+dev:
 	(make client & make server & make bs & wait)
 
 .PHONY: client
