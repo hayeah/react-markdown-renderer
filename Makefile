@@ -1,17 +1,14 @@
-PORT=9000
+.PHONY: all
+all:
+	(make client & make server & make bs & wait)
 
 .PHONY: client
-client:
-	make vendor
+client: vendor
 	webpack --config webpack.config.js --progress --profile --watch
 
 .PHONY: vendor
 vendor:
 	webpack --config vendor.config.js --progress
-
-.PHONY: all
-all:
-	(make client & make bs & wait)
 
 .PHONY: test
 test:
@@ -23,7 +20,7 @@ test:
 
 .PHONY: server
 server:
-	PORT=$(PORT) babel-node server.js
+	PORT=$(PORT) babel-node server.js $(FILE)
 
 .PHONY: bs
 bs:
