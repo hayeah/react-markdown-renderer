@@ -2,10 +2,10 @@
 
 let {lexer} = require("marked");
 let {makeEnsureUnique} = require("./utils");
- 
+
 import * as ast from "./ast";
-import {Node,Token} from "./ast";
-const {NodeTypes,TokenTypes} = ast;
+import {Node, Token} from "./ast";
+const {NodeTypes, TokenTypes} = ast;
 
 const startTag = '<cn>';
 const endTag = '</cn>';
@@ -13,7 +13,7 @@ const endTag = '</cn>';
 export function compile(src: string): ast.Document {
   let tokens = tokenize(src);
   let sections = parse(tokens);
-  return {sections};
+  return { sections };
 }
 
 export function tokenize(md: string): ast.Token[] {
@@ -49,19 +49,19 @@ export function parse(tokens: ast.Token[]): ast.Section[] {
   let heading: ast.HeadingToken;
 
   function createSection() {
-    if(heading == null && content.length == 0) {
+    if (heading == null && content.length == 0) {
       // do nothing
     } else {
       // create a new seciton
       let key = heading && ensureUnique(heading.text);
-      
+
       let headerNode: ast.Heading = {
-         type: NodeTypes.heading,
-         depth: heading.depth,
-         text: heading.text,
-         key,
+        type: NodeTypes.heading,
+        depth: heading.depth,
+        text: heading.text,
+        key,
       };
-      
+
       sections.push({
         type: NodeTypes.section,
         heading: headerNode,
@@ -73,52 +73,52 @@ export function parse(tokens: ast.Token[]): ast.Section[] {
 
   function parseListItem(): ast.ListItem {
     let body: Node[] = [];
-    while(tokens.length > 0) {
+    while (tokens.length > 0) {
       let token = tokens.pop();
       let {type} = token;
-      if(type === TokenTypes.list_item_end) {
+      if (type === TokenTypes.list_item_end) {
         break;
       }
       body.push(token);
     }
 
-    return {type: NodeTypes.list_item, body: body};
+    return { type: NodeTypes.list_item, body: body };
   }
 
 
-  function parseList({ordered}:ast.ListStartToken): ast.List {
+  function parseList({ordered}: ast.ListStartToken): ast.List {
     // {
     //   "type": "list_start",
     //   "ordered": false
     // }
 
     let items = [];
-    while(tokens.length > 0) {
+    while (tokens.length > 0) {
       let token = tokens.pop();
       let {type} = token;
-      if(type === TokenTypes.list_end) {
+      if (type === TokenTypes.list_end) {
         break;
-      } else if(ast.isListItemStartToken(token)) {
+      } else if (ast.isListItemStartToken(token)) {
         items.push(parseListItem());
       }
     }
 
-    return {type: NodeTypes.list, ordered, items};
+    return { type: NodeTypes.list, ordered, items };
 
 
   }
 
-  while(tokens.length > 0) {
+  while (tokens.length > 0) {
 
     let token = tokens.pop();
 
-    if(token.type === TokenTypes.heading) {
+    if (token.type === TokenTypes.heading) {
       // push the current section
       createSection();
 
       content = [];
-      heading = <ast.HeadingToken> token;
-    } else if(ast.isListStartToken(token)) {
+      heading = <ast.HeadingToken>token;
+    } else if (ast.isListStartToken(token)) {
       content.push(parseList(token));
     } else {
       content.push(token)
