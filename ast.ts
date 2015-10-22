@@ -38,9 +38,17 @@ export interface Node {
 }
 
 export const NodeTypes = {
+  heading: "heading",
   section: "section",
   list: "list",
   list_item: "list-item",
+}
+
+export interface Heading extends Node {
+  // a unique ID for the whole markdown document
+  key: string,
+  depth: number,
+  text: string,
 }
 
 export interface List extends Node {
@@ -61,7 +69,11 @@ export function isList(o: Node): o is List {
 }
 
 export interface Section extends Node {
-  heading?: HeadingToken,
+  heading?: Heading,
   content: Node[],
   key: string,
+}
+
+export interface Document {
+  sections: Section[];
 }

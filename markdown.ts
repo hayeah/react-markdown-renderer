@@ -10,6 +10,12 @@ const {NodeTypes,TokenTypes} = ast;
 const startTag = '<cn>';
 const endTag = '</cn>';
 
+export function compile(src: string): ast.Document {
+  let tokens = tokenize(src);
+  let sections = parse(tokens);
+  return {sections};
+}
+
 export function tokenize(md: string): ast.Token[] {
   return lexer(md);
   
@@ -49,9 +55,16 @@ export function parse(tokens: ast.Token[]): ast.Section[] {
       // create a new seciton
       let key = heading && ensureUnique(heading.text);
       
+      let headerNode: ast.Heading = {
+         type: NodeTypes.heading,
+         depth: heading.depth,
+         text: heading.text,
+         key,
+      };
+      
       sections.push({
         type: NodeTypes.section,
-        heading,
+        heading: headerNode,
         content,
         key
       });
