@@ -3,78 +3,14 @@
 let {lexer} = require("marked");
 let {makeEnsureUnique} = require("./utils");
  
+import * as ast from "./ast";
+import {Node,Token} from "./ast";
+const {NodeTypes,TokenTypes} = ast;
 
 const startTag = '<cn>';
 const endTag = '</cn>';
 
-const TokenTypes = {
-  heading: "heading",
-  list_start: "list_start",
-  list_end: "list_end",
-  
-  list_item_start: "list_item_start",
-  loose_item_start: "loose_item_start",
-  list_item_end: "list_item_end",
-};
-
-interface Token {
-  type: string,
-}
-
-interface HeadingToken extends Token {
-  depth: number,
-  text: string,
-}
-
-interface ListStartToken extends Token {
-  ordered: boolean,
-}
-
-function isListStartToken(token: Token): token is ListStartToken {
-  return token.type == TokenTypes.list_start;
-}
-
-interface ListItemStartToken extends Token {}
-
-function isListItemStartToken(token: Token): token is ListItemStartToken {
-  return token.type == TokenTypes.list_item_start || token.type == TokenTypes.loose_item_start;
-}
-
-
-interface Node {
-  type: string,
-}
-
-const NodeTypes = {
-  section: "section",
-  list: "list",
-  list_item: "list-item",
-}
-
-interface List extends Node {
-  ordered: boolean,
-  items: Node[],
-}
-
-interface ListItem extends Node {
-  body: Node[],
-}
-
-function isListItem(o: Node): o is ListItem {
-  return o.type == NodeTypes.list_item;
-}
-
-function isList(o: Node): o is List {
-  return o.type == NodeTypes.list;
-}
-
-interface Section extends Node {
-  heading?: HeadingToken,
-  content: Node[],
-  key: string,
-}
-
-export function tokenize(md: string): Token[] {
+export function tokenize(md: string): ast.Token[] {
   return lexer(md);
   
   // let tokens = lexer(md);
@@ -96,15 +32,15 @@ export function tokenize(md: string): Token[] {
   // return allTokens;
 }
 
-export function parse(tokens: Token[]): Section[] {
-  let sections: Section[] = [];
+export function parse(tokens: ast.Token[]): ast.Section[] {
+  let sections: ast.Section[] = [];
 
   let ensureUnique = makeEnsureUnique();
   // dup
   tokens = tokens.reverse();
 
-  let content: Node[] = [];
-  let heading: HeadingToken;
+  let content: ast.Node[] = [];
+  let heading: ast.HeadingToken;
 
   function createSection() {
     if(heading == null && content.length == 0) {
@@ -115,12 +51,14 @@ export function parse(tokens: Token[]): Section[] {
       
       sections.push({
         type: NodeTypes.section,
-        heading,content,key
+        heading,
+        content,
+        key
       });
     }
   }
 
-  function parseListItem(): ListItem {
+  function parseListItem(): ast.ListItem {
     let body: Node[] = [];
     while(tokens.length > 0) {
       let token = tokens.pop();
@@ -135,7 +73,7 @@ export function parse(tokens: Token[]): Section[] {
   }
 
 
-  function parseList({ordered}:ListStartToken): List {
+  function parseList({ordered}:ast.ListStartToken): ast.List {
     // {
     //   "type": "list_start",
     //   "ordered": false
@@ -147,7 +85,7 @@ export function parse(tokens: Token[]): Section[] {
       let {type} = token;
       if(type === TokenTypes.list_end) {
         break;
-      } else if(isListItemStartToken(token)) {
+      } else if(ast.isListItemStartToken(token)) {
         items.push(parseListItem());
       }
     }
@@ -166,8 +104,8 @@ export function parse(tokens: Token[]): Section[] {
       createSection();
 
       content = [];
-      heading = <HeadingToken> token;
-    } else if(isListStartToken(token)) {
+      heading = <ast.HeadingToken> token;
+    } else if(ast.isListStartToken(token)) {
       content.push(parseList(token));
     } else {
       content.push(token)
