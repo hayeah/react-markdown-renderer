@@ -14,6 +14,7 @@
     "css-loader": "^0.19.0",
     "express": "^4.13.3",
     "marked": "^0.3.5",
+    "ntypescript": "^1.201510220605.1",
     "react": "^0.14.0",
     "react-dom": "^0.14.0",
     "sockjs": "^0.3.15",
@@ -21,7 +22,6 @@
     "ts-loader": "^0.5.6"
   },
   "devDependencies": {
-    "typescript": "^1.6.2",
     "babel-core": "^5.8.25",
     "babel-loader": "^5.3.2",
     "babel-runtime": "^5.8.25",
@@ -33,6 +33,9 @@
     "microtime": "^2.0.0",
     "mocha": "^2.3.3",
     "mocha-babel": "^3.0.0",
+    "ts-node": "^0.2.5",
+    "typescript": "^1.6.2",
+    "typescript-require": "^0.2.9",
     "uglifyify": "^3.0.1",
     "watchify": "^3.4.0",
     "webpack": "^1.12.2"
