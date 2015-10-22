@@ -6,6 +6,7 @@ const renderHTML = require("./renderHTML");
 
 import {hashCode} from "./utils";
 import Code from "./components/Code";
+import Heading from "./components/Heading";
 
 module.exports = function render(sections,choselang="default") {
   return <Document chosenlang={choselang} sections={sections}/>
@@ -42,8 +43,6 @@ const widgets = {
   Video,
 };
 
-
-
 let I18n = ({body,lang}) => {
   let renderedBody = renderNodes(body,"default");
   return (
@@ -52,21 +51,6 @@ let I18n = ({body,lang}) => {
     </div>
   );
 };
-
-const headerLevels = ["h1","h2","h3","h4","h5","h6"];
-
-let Heading = (props) => {
-  let {depth,text,id} = props;
-  let tag = headerLevels[depth-1];
-  let headerProps = id ? {id} : {};
-
-  let body = (
-    <a href={"#"+id}>
-      {text}
-    </a>
-  );
-  return React.createElement(tag,headerProps,body);
-}
 
 function renderNodes(nodes,chosenLang="default") {
   let ensureUnique = makeEnsureUnique();
