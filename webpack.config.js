@@ -5,6 +5,11 @@ module.exports = {
     // path: __dirname,
     filename: "./public/app.js"
   },
+  
+  resolve: {
+    // Add `.ts` and `.tsx` as a resolvable extension.
+    extensions: ['', '.webpack.js', '.web.js', '.ts', '.tsx', '.js']
+  },
 
   // node: {
   //   console: 'empty',
@@ -39,6 +44,13 @@ module.exports = {
         // exclude: /(node_modules|bower_components)/,
         exclude: /node_modules/,
         loader: "babel"
+      },
+      
+      {
+        test: /\.tsx?$/,
+        // exclude: /(node_modules|bower_components)/,
+        exclude: /node_modules/,
+        loader: "babel!ts?transpileOnly=true"
       },
     ]
   }
