@@ -1,14 +1,9 @@
 import * as React from "react";
+import {Heading} from "../ast";
 
 const headerLevels = ["h1", "h2", "h3", "h4", "h5", "h6"];
 
-interface Props {
-	depth: number,
-	text: string,
-	id: string,
-}
-
-let Heading = (props: Props) => {
+let Heading = (props: Heading) => {
   let {depth, text, id} = props;
   let tag = headerLevels[depth - 1];
   let headerProps = id ? { id } : {};

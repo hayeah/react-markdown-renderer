@@ -10,10 +10,15 @@ const {NodeTypes, TokenTypes} = ast;
 const startTag = '<cn>';
 const endTag = '</cn>';
 
+export default compile;
+
 export function compile(src: string): ast.Document {
   let tokens = tokenize(src);
   let sections = parse(tokens);
-  return { sections };
+  return {
+    type: NodeTypes.document,
+    sections
+  };
 }
 
 export function tokenize(md: string): ast.Token[] {
@@ -59,14 +64,14 @@ export function parse(tokens: ast.Token[]): ast.Section[] {
         type: NodeTypes.heading,
         depth: heading.depth,
         text: heading.text,
-        key,
+        id: key,
       };
 
       sections.push({
         type: NodeTypes.section,
         heading: headerNode,
         content,
-        key
+        key: key,
       });
     }
   }

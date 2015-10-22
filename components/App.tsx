@@ -1,6 +1,8 @@
 import * as React from "react";
-let renderMarkdown = require("../render");
-let compileMarkdown = require("../compile");
+// let renderMarkdown = require("../render");
+import renderMarkdown from "../render2"
+import compileMarkdown from "../markdown" 
+
 
 declare var SockJS: any;
 
@@ -48,8 +50,12 @@ let App = React.createClass({
 
   render() {
     let {src,lang} = this.state;
-    let sections = compileMarkdown(src,lang);
-    let doc = renderMarkdown(sections,lang)
+    // let sections = compileMarkdown(src,lang);
+    // let doc = renderMarkdown(sections,lang)
+    
+    let document = compileMarkdown(src);
+    let renderedDocument = renderMarkdown(document);
+    
     return (
       <div>
         <div className="language-control">
@@ -57,7 +63,7 @@ let App = React.createClass({
           <a href="javascript:void(0)" onClick={this.chooseLanguage.bind(this,"default")}>Default</a>
           <a href="javascript:void(0)" onClick={this.chooseLanguage.bind(this,"all")}>Both</a>
         </div>
-        {doc}
+        {renderedDocument}
       </div>
     );
   },
