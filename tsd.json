@@ -13,6 +13,9 @@
     },
     "react/react.d.ts": {
       "commit": "98a9440752f3f2ad7786aba1bf9bdefec818919e"
+    },
+    "sockjs/sockjs.d.ts": {
+      "commit": "418ef25d7f814ac2544ee65726b86bf929260212"
     }
   }
 }
