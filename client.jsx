@@ -20,6 +20,7 @@ let App = React.createClass({
 
     sockjs.onmessage = (e) => {
       let src = e.data;
+      console.log("update md");
       // console.log('md', src);
 
       this.setState({src});

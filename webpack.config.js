@@ -1,5 +1,5 @@
 module.exports = {
-  entry: "./client.js",
+  entry: "./client.jsx",
 
   output: {
     // path: __dirname,
@@ -8,7 +8,7 @@ module.exports = {
   
   resolve: {
     // Add `.ts` and `.tsx` as a resolvable extension.
-    extensions: ['', '.webpack.js', '.web.js', '.ts', '.tsx', '.js']
+    extensions: ['', '.webpack.js', '.web.js', '.ts', '.tsx', '.js', '.jsx']
   },
 
   // node: {
@@ -19,7 +19,7 @@ module.exports = {
   // },
 
   // devtool: "cheap-eval-source-map",
-  devtool: "cheap-module-eval-source-map",
+  devtool: "source-map",
 
   externals: [
     {
