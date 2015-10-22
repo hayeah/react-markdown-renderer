@@ -6,7 +6,6 @@ const express = require("express");
 const sockjs = require('sockjs');
 const chokidar = require("chokidar");
 
-
 let app = express();
 
 let markdownFilepath = process.argv[2];
