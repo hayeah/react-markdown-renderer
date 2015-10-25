@@ -1,11 +1,15 @@
 import * as React from "react";
 import {Section} from "../ast";
+import {renderNode,renderNodes} from "../render2";
 
 export default (props: Section) => {
-	let {id} = props;
+	let {content} = props;
+
 	return (
-		<section key={id}>
+		<section>
 			{props.heading.text}
+
+			{renderNodes(content)}
 		</section>
 	);
 };

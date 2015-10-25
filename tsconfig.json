@@ -4,6 +4,7 @@
         "target": "es5",
         "jsx": "react",
         "noEmit": true,
+        "noLib": true,
         "noImplicitAny": false,
         "sourceMap": false
     },

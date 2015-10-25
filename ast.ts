@@ -43,13 +43,33 @@ export const NodeTypes = {
   section: "section",
   list: "list",
   list_item: "list-item",
+  paragraph: "paragraph",
+  code: "code",
+  html: "html",
 }
 
-export interface Heading extends Node {
+export interface TextNode extends Node {
+  text: string,
+}
+
+export function isTextNode(o: any): o is TextNode {
+  return o.text != null;
+}
+
+export type Paragraph = TextNode;
+
+export interface Heading extends TextNode {
   // a unique ID for the whole markdown document
   id: string,
   depth: number,
-  text: string,
+}
+
+export interface Code extends TextNode {
+  lang: string,
+}
+
+export interface HTML extends TextNode {
+  pre: boolean,
 }
 
 export interface List extends Node {

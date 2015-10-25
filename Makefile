@@ -12,7 +12,7 @@ vendor:
 
 .PHONY: test
 test:
-	mocha --compilers js:mocha-babel spec
+	mocha --watch --require ts-node/register  --compilers js:babel-core/register spec/foo_spec
 
 # .PHONY: client
 # client:
