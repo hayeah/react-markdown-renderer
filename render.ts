@@ -15,6 +15,7 @@ import I18n from "./components/I18n";
 import {List,ListItem} from "./components/List";
 import Text from "./components/Text";
 import BlockQuote from "./components/BlockQuote";
+import HTML from "./components/HTML";
 
 type Component = (props: any) => Element;
 
@@ -25,6 +26,8 @@ type Component = (props: any) => Element;
 let Space = () => {
 	return React.createElement("span");
 }
+
+
 
 let components = {
 	document: Document,
@@ -38,6 +41,7 @@ let components = {
 	text: Text,
 	space: Space,
 	blockquote: BlockQuote,
+	html: HTML,
 };
 
 export function renderNodes(nodes: ast.Node[]): Element[] {

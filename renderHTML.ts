@@ -2,7 +2,7 @@ let babel = require("babel-core/browser");
 
 import * as React from "react";
 
-module.exports = function renderHTML(html:string,widgets={}): React.HTMLElement {
+function renderHTML(html:string,widgets={}): React.HTMLElement {
   let jsx = `let dom = ${html}`;
 
   // console.log("jsx",jsx);
@@ -26,3 +26,5 @@ module.exports = function renderHTML(html:string,widgets={}): React.HTMLElement 
 
   return dom;
 }
+
+export default renderHTML;
