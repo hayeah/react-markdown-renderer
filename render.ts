@@ -12,12 +12,18 @@ import Section from "./components/Section";
 import Paragraph from "./components/Paragraph";
 import Code from "./components/Code";
 import I18n from "./components/I18n";
+import {List,ListItem} from "./components/List";
+import Text from "./components/Text";
 
 type Component = (props: any) => Element;
 
 // interface Components {
 // 	heading: Component,
 // }
+
+let Space = () => {
+	return React.createElement("span");
+}
 
 let components = {
 	document: Document,
@@ -26,6 +32,10 @@ let components = {
 	paragraph: Paragraph,
 	code: Code,
 	i18n: I18n,
+	list: List,
+	"list-item": ListItem,
+	text: Text,
+	space: Space,
 };
 
 export function renderNodes(nodes: ast.Node[]): Element[] {
