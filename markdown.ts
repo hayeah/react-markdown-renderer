@@ -23,65 +23,42 @@ export function parse(tokens: ast.Token[]): ast.Section[] {
   let sections: ast.Section[] = [];
 
   let ensureUnique = makeEnsureUnique();
-  // dup
+
+  // dup tokens
   tokens = tokens.reverse();
+  function popToken(): Token {
+    return tokens.pop();
+  }
 
-  let content: ast.Node[] = [];
-  let heading: ast.HeadingToken;
-
-  function createSection() {
-    if (heading == null && content.length == 0) {
-      // do nothing
-    } else {
-      // create a new seciton
-      let key: string;
-      let headerNode: ast.Heading;
-
-      if(heading != null) {
-        key = ensureUnique(heading.text);
-        headerNode = {
-          type: NodeTypes.heading,
-          depth: heading.depth,
-          text: heading.text,
-          id: key,
-        };
-      }
-
-      sections.push({
-        type: NodeTypes.section,
-        heading: headerNode,
-        content,
-        id: key,
-      });
+  function peekToken(): Token {
+    if(tokens.length == 0) {
+      return null;
     }
+    return tokens[tokens.length - 1];
   }
 
   function parseListItem(): ast.ListItem {
-    let body: Node[] = [];
-    while (tokens.length > 0) {
-      let token = tokens.pop();
-      let {type} = token;
-      if (type === TokenTypes.list_item_end) {
-        break;
-      }
-      body.push(token);
-    }
+    popToken(); // "list_item_start"
+
+    let body = parseContent(TokenTypes.list_item_end);
+    popToken(); // list_item_end
 
     return { type: NodeTypes.list_item, body: body };
   }
 
 
-  function parseList({ordered}: ast.ListStartToken): ast.List {
-    // {
-    //   "type": "list_start",
-    //   "ordered": false
-    // }
+  function parseList(): ast.List {
+    // "list_start"
+    let {ordered} = <ast.ListStartToken> popToken();
+
 
     let items = [];
     while (tokens.length > 0) {
-      let token = tokens.pop();
+      let token = peekToken();
       let {type} = token;
+
       if (type === TokenTypes.list_end) {
+        popToken();
         break;
       } else if (ast.isListItemStartToken(token)) {
         items.push(parseListItem());
@@ -89,57 +66,77 @@ export function parse(tokens: ast.Token[]): ast.Section[] {
     }
 
     return { type: NodeTypes.list, ordered, items };
+  }
 
+  function parseBlockQuote(): ast.BlockQuote {
+    popToken(); // blockquote_start
+    let content = parseContent(ast.TokenTypes.blockquote_end);
+    popToken(); // blockquote_end
+    return {
+      type: ast.NodeTypes.blockquote,
+      content,
+    };
+  }
+
+  function parseSection(): ast.Section {
+    let token = peekToken();
+
+    let key: string;
+    let heading: ast.Heading;
+    if (token.type === TokenTypes.heading) {
+      let headingToken = <ast.HeadingToken> token;
+      key = ensureUnique(headingToken.text);
+
+      heading = {
+        type: NodeTypes.heading,
+        depth: headingToken.depth,
+        text: headingToken.text,
+        id: key,
+      }
+
+      tokens.pop();
+    }
+
+    let content = parseContent(ast.NodeTypes.heading);
+
+    return {
+      type: NodeTypes.section,
+      heading: heading,
+      content,
+      id: key,
+    }
 
   }
 
-  while (tokens.length > 0) {
 
-    let token = tokens.pop();
 
-    if (token.type === TokenTypes.heading) {
-      // push the current section
-      createSection();
+  function parseContent(endType: string): Node[] {
+    let content: Node[] = [];
+    while(true) {
+      let token = peekToken();
+      if(token == null) {
+        return content;
+      }
 
-      content = [];
-      heading = <ast.HeadingToken>token;
-    } else if (ast.isListStartToken(token)) {
-      content.push(parseList(token));
-    } else {
-      content.push(token)
+      if(token.type == endType) {
+        return content
+      }
+
+      if (ast.isListStartToken(token)) {
+        content.push(parseList());
+      } else if(token.type === ast.TokenTypes.blockquote_start) {
+        content.push(parseBlockQuote());
+      } else {
+        content.push(tokens.pop());
+      }
     }
   }
 
-  createSection();
+  while (tokens.length > 0) {
+    sections.push(parseSection())
+  }
+
+  // createSection();
 
   return sections;
 }
-
-// function isCNBlock(token) {
-//   let {type,text} = token;
-//   if(type != "html") {
-//     return false;
-//   }
-
-//   if(text.substr(0,startTag.length) == startTag) {
-//     return true;
-//     // parts.push(text.substr(4));
-//   }
-
-//   return false;
-// }
-
-// function extractCnContent(token) {
-//   let {text} = token;
-//   let end = text.indexOf(endTag);
-//   if(end == -1) {
-//     end = undefined;
-//   }
-//   return text.substring(startTag.length,end);
-// }
-
-
-// export function compile(md,lang) {
-//   let tokens = tokenize(md,lang);
-//   return sectionize(tokens);
-// }
