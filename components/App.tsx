@@ -1,14 +1,14 @@
 import * as React from "react";
 // let renderMarkdown = require("../render");
-import renderMarkdown from "../render2"
-import compileMarkdown from "../markdown" 
+import renderMarkdown from "../render"
+import compileMarkdown from "../markdown"
 
 
 declare var SockJS: any;
 
 function onMarkdownUpdate(callback: (src: string) => void) {
 	let sockjs = new SockJS('/echo');
-	
+
 	sockjs.onopen = () => {
       console.log('[*] open', sockjs.protocol);
     };
@@ -27,7 +27,7 @@ function onMarkdownUpdate(callback: (src: string) => void) {
 			onMarkdownUpdate(callback);
 		},2000);
 	};
-		
+
 }
 
 let App = React.createClass({
@@ -52,10 +52,10 @@ let App = React.createClass({
     let {src,lang} = this.state;
     // let sections = compileMarkdown(src,lang);
     // let doc = renderMarkdown(sections,lang)
-    
+
     let document = compileMarkdown(src);
     let renderedDocument = renderMarkdown(document);
-    
+
     return (
       <div>
         <div className="language-control">

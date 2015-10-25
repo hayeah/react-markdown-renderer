@@ -2,21 +2,21 @@ import * as React from "react";
 import {Document} from "../ast";
 
 // circular import...
-import render from "../render2";
+import render from "../render";
 
 export default (props: Document) => {
 	let {sections} = props;
-	
-	// let section = sections[0]; 
-	
+
+	// let section = sections[0];
+
 	if(sections.length == 0) {
 		return <div>document is empty</div>;
 	}
-	
+
 	return (
 		<div className="marked">
 			markdown document yo!
-			{sections.map(render)}
+			{sections.map((section) => render(section))}
 		</div>
 	);
 };
