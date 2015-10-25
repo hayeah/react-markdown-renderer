@@ -1,23 +1,24 @@
+import * as React from "react";
+
 let marked = require("marked");
 let babel = require("babel-core/browser");
-let React = require("react");
 
-let options = {
-  ...marked.defaults,
-  xhtml: true,
-};
-
+let options = Object.assign(marked.defaults,{xhtml: true});
 let inlineLexer = new marked.InlineLexer([],options);
 
-module.exports = function renderInline(md) {
+function outputInlineHTML(md: string): string {
+  return inlineLexer.output(md);
+}
+
+export default function renderInline(md: string): React.ReactElement<any> {
   // let inlineHTML = InlineLexer.output(md,[]);
-  let inlineHTML = inlineLexer.output(md);
+  let inlineHTML = outputInlineHTML(md);
 
   let jsx = `let dom = <span>${inlineHTML}</span>`;
 
   // console.log("jsx",jsx);
 
-  let code = babel.transform(jsx).code;
+  let code: string = babel.transform(jsx).code;
 
   // console.log("code",jsx);
 
