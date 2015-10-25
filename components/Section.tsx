@@ -1,13 +1,15 @@
 import * as React from "react";
-import {Section} from "../ast";
+import Heading from "./Heading";
+import * as ast from "../ast";
 import {renderNode,renderNodes} from "../render";
 
-export default (props: Section) => {
-	let {content} = props;
+
+export default (props: ast.Section) => {
+	let {content,heading} = props;
 
 	return (
 		<section>
-			{props.heading.text}
+			{renderNode(heading)}
 
 			{renderNodes(content)}
 		</section>

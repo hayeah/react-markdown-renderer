@@ -1,9 +1,9 @@
 import * as React from "react";
-import {Heading} from "../ast";
+import * as ast from "../ast";
 
 const headerLevels = ["h1", "h2", "h3", "h4", "h5", "h6"];
 
-let Heading = (props: Heading) => {
+let Heading = (props: ast.Heading) => {
   let {depth, text, id} = props;
   let tag = headerLevels[depth - 1];
   let headerProps = id ? { id } : {};
