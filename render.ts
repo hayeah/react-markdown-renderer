@@ -11,6 +11,7 @@ import Document from "./components/Document";
 import Section from "./components/Section";
 import Paragraph from "./components/Paragraph";
 import Code from "./components/Code";
+import I18n from "./components/I18n";
 
 type Component = (props: any) => Element;
 
@@ -24,14 +25,21 @@ let components = {
 	section: Section,
 	paragraph: Paragraph,
 	code: Code,
+	i18n: I18n,
 };
 
 export function renderNodes(nodes: ast.Node[]): Element[] {
+	let i = 0;
 	return nodes.map(node => {
 		let unique = makeEnsureUnique()
 		let key: string;
 		if(ast.isTextNode(node)) {
 			key = unique(hashCode(node.text).toString());
+		} else if(ast.isIdNode(node)) {
+			key = unique(node.id);
+		} else {
+			i++;
+			key = unique(i.toString());
 		}
 		return renderNode(node,key);
 	});

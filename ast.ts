@@ -4,7 +4,7 @@ export const TokenTypes = {
   heading: "heading",
   list_start: "list_start",
   list_end: "list_end",
-  
+
   list_item_start: "list_item_start",
   loose_item_start: "loose_item_start",
   list_item_end: "list_item_end",
@@ -46,10 +46,19 @@ export const NodeTypes = {
   paragraph: "paragraph",
   code: "code",
   html: "html",
+  i18n: "i18n",
 }
 
 export interface TextNode extends Node {
   text: string,
+}
+
+export interface IdNode extends Node {
+  id: string,
+}
+
+export function isIdNode(o: any): o is IdNode {
+  return o.id != null;
 }
 
 export function isTextNode(o: any): o is TextNode {
@@ -58,11 +67,15 @@ export function isTextNode(o: any): o is TextNode {
 
 export type Paragraph = TextNode;
 
+export type KeyNode = TextNode | IdNode;
+
 export interface Heading extends TextNode {
   // a unique ID for the whole markdown document
   id: string,
   depth: number,
 }
+
+
 
 export interface Code extends TextNode {
   lang: string,
@@ -89,12 +102,18 @@ export function isList(o: Node): o is List {
   return o.type == NodeTypes.list;
 }
 
-export interface Section extends Node {
+export interface Section extends Node, IdNode {
   heading?: Heading,
   content: Node[],
-  key: string,
+  // key: string,
 }
 
 export interface Document extends Node {
-  sections: Section[];
+  sections: Section[],
+}
+
+export interface i18n extends Node {
+  id: string,
+  lang: string,
+  sections: Section[],
 }

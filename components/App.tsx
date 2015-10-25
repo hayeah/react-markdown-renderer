@@ -1,7 +1,8 @@
 import * as React from "react";
 // let renderMarkdown = require("../render");
-import renderMarkdown from "../render"
+import {renderNodes} from "../render"
 import compileMarkdown from "../markdown"
+import {i18nTransform} from "../i18n";
 
 
 declare var SockJS: any;
@@ -53,8 +54,11 @@ let App = React.createClass({
     // let sections = compileMarkdown(src,lang);
     // let doc = renderMarkdown(sections,lang)
 
-    let document = compileMarkdown(src);
-    let renderedDocument = renderMarkdown(document);
+    let sections = compileMarkdown(src);
+    let i18nSections = i18nTransform(sections);
+    let renderedDocument = renderNodes(i18nSections);
+    // i18n
+
 
     return (
       <div>
@@ -63,7 +67,10 @@ let App = React.createClass({
           <a href="javascript:void(0)" onClick={this.chooseLanguage.bind(this,"default")}>Default</a>
           <a href="javascript:void(0)" onClick={this.chooseLanguage.bind(this,"all")}>Both</a>
         </div>
-        {renderedDocument}
+
+        <div className="marked">
+          {renderedDocument}
+        </div>
       </div>
     );
   },

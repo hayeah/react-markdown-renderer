@@ -7,40 +7,16 @@ import * as ast from "./ast";
 import {Node, Token} from "./ast";
 const {NodeTypes, TokenTypes} = ast;
 
-const startTag = '<cn>';
-const endTag = '</cn>';
-
 export default compile;
 
-export function compile(src: string): ast.Document {
+export function compile(src: string): ast.Section[] {
   let tokens = tokenize(src);
   let sections = parse(tokens);
-  return {
-    type: NodeTypes.document,
-    sections
-  };
+  return sections;
 }
 
 export function tokenize(md: string): ast.Token[] {
   return lexer(md);
-  
-  // let tokens = lexer(md);
-
-  // let allTokens = [];
-  // tokens.forEach(token => {
-  //   if(isCNBlock(token)) {
-  //     let cnTokens = tokenize(extractCnContent(token));
-  //     allTokens.push({
-  //       type: "I18n",
-  //       lang: "zh-cn",
-  //       body: cnTokens,
-  //     });
-  //   } else {
-  //     allTokens.push(token);
-  //   }
-  // });
-
-  // return allTokens;
 }
 
 export function parse(tokens: ast.Token[]): ast.Section[] {
@@ -58,20 +34,24 @@ export function parse(tokens: ast.Token[]): ast.Section[] {
       // do nothing
     } else {
       // create a new seciton
-      let key = heading && ensureUnique(heading.text);
+      let key: string;
+      let headerNode: ast.Heading;
 
-      let headerNode: ast.Heading = {
-        type: NodeTypes.heading,
-        depth: heading.depth,
-        text: heading.text,
-        id: key,
-      };
+      if(heading != null) {
+        key = ensureUnique(heading.text);
+        headerNode = {
+          type: NodeTypes.heading,
+          depth: heading.depth,
+          text: heading.text,
+          id: key,
+        };
+      }
 
       sections.push({
         type: NodeTypes.section,
         heading: headerNode,
         content,
-        key: key,
+        id: key,
       });
     }
   }
