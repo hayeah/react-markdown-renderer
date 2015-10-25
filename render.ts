@@ -10,6 +10,7 @@ import Heading from "./components/Heading";
 import Document from "./components/Document";
 import Section from "./components/Section";
 import Paragraph from "./components/Paragraph";
+import Code from "./components/Code";
 
 type Component = (props: any) => Element;
 
@@ -22,6 +23,7 @@ let components = {
 	heading: Heading,
 	section: Section,
 	paragraph: Paragraph,
+	code: Code,
 };
 
 export function renderNodes(nodes: ast.Node[]): Element[] {

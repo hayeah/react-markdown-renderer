@@ -5,7 +5,7 @@ interface Props {
   lang: string,
 }
 
-class Code extends React.Component<Props,{}> {
+export default class Code extends React.Component<Props,{}> {
   componentDidMount() {
     this.highlight();
   }
