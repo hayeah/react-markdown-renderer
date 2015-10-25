@@ -8,6 +8,9 @@ export const TokenTypes = {
   list_item_start: "list_item_start",
   loose_item_start: "loose_item_start",
   list_item_end: "list_item_end",
+
+  blockquote_start: "blockquote_start",
+  blockquote_end: "blockquote_end",
 };
 
 export interface Token {
@@ -47,6 +50,7 @@ export const NodeTypes = {
   code: "code",
   html: "html",
   i18n: "i18n",
+  blockquote: "blockquote",
 }
 
 export interface TextNode extends Node {
@@ -116,4 +120,8 @@ export interface i18n extends Node {
   id: string,
   lang: string,
   sections: Section[],
+}
+
+export interface BlockQuote extends Node {
+  content: Node[],
 }

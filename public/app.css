@@ -61,3 +61,14 @@ body {
   margin-bottom: 60px;
   /*background-color: rgba(255,0,0,0.3);*/
 }
+
+.marked li p {
+  margin: 0.6em 0;
+}
+
+.marked blockquote {
+  background: #F9FBFF;
+  border-left: 4px solid #BFD4FF;
+  padding: 0px 10px;
+  margin-left: 0;
+}

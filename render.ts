@@ -14,6 +14,7 @@ import Code from "./components/Code";
 import I18n from "./components/I18n";
 import {List,ListItem} from "./components/List";
 import Text from "./components/Text";
+import BlockQuote from "./components/BlockQuote";
 
 type Component = (props: any) => Element;
 
@@ -36,6 +37,7 @@ let components = {
 	"list-item": ListItem,
 	text: Text,
 	space: Space,
+	blockquote: BlockQuote,
 };
 
 export function renderNodes(nodes: ast.Node[]): Element[] {
