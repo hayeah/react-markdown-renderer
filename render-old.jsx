@@ -4,9 +4,14 @@ const {makeEnsureUnique,pp} = require("./utils");
 const renderInline = require("./renderInline");
 const renderHTML = require("./renderHTML");
 
+import {hashCode} from "./utils";
+import Code from "./components/Code";
+import Heading from "./components/Heading";
+
 module.exports = function render(sections,choselang="default") {
   return <Document chosenlang={choselang} sections={sections}/>
 };
+
 
 let Paragraph = ({text}) => {
   return <p>{renderInline(text)}</p>;
@@ -38,37 +43,6 @@ const widgets = {
   Video,
 };
 
-let Code = React.createClass({
-  componentDidMount() {
-    this.highlight();
-  },
-
-  // componentDidUpdate() {
-  //   this.highlight();
-  // },
-
-  highlight() {
-    let {text} = this.props;
-    // console.log("hilight",text);
-    let {
-      $code,
-    } = this.refs;
-
-    hljs.highlightBlock($code);
-  },
-
-  render() {
-    let {text,lang} = this.props;
-    return (
-      <pre>
-        <code ref="$code" className={lang}>
-          {text}
-        </code>
-      </pre>
-    );
-  }
-});
-
 let I18n = ({body,lang}) => {
   let renderedBody = renderNodes(body,"default");
   return (
@@ -77,37 +51,6 @@ let I18n = ({body,lang}) => {
     </div>
   );
 };
-
-
-
-function hashCode(str) {
-  if(str == null || str.charCodeAt == null) {
-    return "";
-  }
-  var hash = 0, i, chr, len;
-  if (str.length == 0) return hash;
-  for (i = 0, len = str.length; i < len; i++) {
-    chr   = str.charCodeAt(i);
-    hash  = ((hash << 5) - hash) + chr;
-    hash |= 0; // Convert to 32bit integer
-  }
-  return hash;
-};
-
-const headerLevels = ["h1","h2","h3","h4","h5","h6"];
-
-let Heading = (props) => {
-  let {depth,text,id} = props;
-  let tag = headerLevels[depth-1];
-  let headerProps = id ? {id} : {};
-
-  let body = (
-    <a href={"#"+id}>
-      {text}
-    </a>
-  );
-  return React.createElement(tag,headerProps,body);
-}
 
 function renderNodes(nodes,chosenLang="default") {
   let ensureUnique = makeEnsureUnique();
