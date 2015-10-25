@@ -2,13 +2,14 @@ import * as React from "react";
 import * as ast from "./ast";
 import {compile} from "./markdown";
 
-// const {NodeTypes} = ast;
+import {makeEnsureUnique,hashCode} from "./utils"
 
 type Element = React.ReactElement<any>;
 
 import Heading from "./components/Heading";
 import Document from "./components/Document";
 import Section from "./components/Section";
+import Paragraph from "./components/Paragraph";
 
 type Component = (props: any) => Element;
 
@@ -20,28 +21,33 @@ let components = {
 	document: Document,
 	heading: Heading,
 	section: Section,
+	paragraph: Paragraph,
 };
 
-components.heading
+export function renderNodes(nodes: ast.Node[]): Element[] {
+	return nodes.map(node => {
+		let unique = makeEnsureUnique()
+		let key: string;
+		if(ast.isTextNode(node)) {
+			key = unique(hashCode(node.text).toString());
+		}
+		return renderNode(node,key);
+	});
+}
 
-// class Renderer {
-// 	// section(section: ast.Section): React.ReactElement<any>;
-// 	document(doc: ast.Document) {
-// 	}
-// }
-
-export default function render(node: ast.Node): Element {
+export function renderNode(node: ast.Node, key? : string): Element {
 	let component = components[node.type];
 
 	if (component == null) {
 		throw `unrecognized node type: ${node.type}`
 	}
 
-	return React.createElement(component, node);
+	let props: any = node;
+	if(key != null) {
+		props = Object.assign(props,{key: key});
+	}
+
+	return React.createElement(component, props);
 }
 
-/* 
-hmmm.
-
-<Component {...props}>
-*/
+export default renderNode;
